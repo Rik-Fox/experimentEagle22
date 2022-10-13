@@ -62,18 +62,6 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
-    if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        component.frameNStart = frameN  # exact frame index
-        component.tStart = t  # local t and not account for scr refresh
-        component.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(component, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, f"{component.name}.started")
-        component.setAutoDraw(True)
-
-
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
@@ -122,7 +110,7 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 # --- Setup the Window ---
 win = visual.Window(
     size=(1024, 768),
-    fullscr=False,
+    fullscr=True,
     screen=0,
     winType="pyglet",
     allowStencil=False,
@@ -156,8 +144,6 @@ eyetracker = None
 defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
 # --- Initialize components for Routine "trial" ---
-
-trialComponents = []
 slider = visual.Slider(
     win=win,
     name="slider",
@@ -182,8 +168,6 @@ slider = visual.Slider(
     depth=0,
     readOnly=False,
 )
-trialComponents.append(slider)
-
 slider_2 = visual.Slider(
     win=win,
     name="slider_2",
@@ -208,8 +192,6 @@ slider_2 = visual.Slider(
     depth=-1,
     readOnly=False,
 )
-trialComponents.append(slider_2)
-
 textbox = visual.TextBox2(
     win,
     text="Any text\n\nincluding line breaks",
@@ -236,8 +218,6 @@ textbox = visual.TextBox2(
     name="textbox",
     autoLog=True,
 )
-trialComponents.append(textbox)
-
 text = visual.TextStim(
     win=win,
     name="text",
@@ -253,15 +233,13 @@ text = visual.TextStim(
     languageStyle="LTR",
     depth=-3.0,
 )
-# trialComponents.append(text)
-
 img = visual.ImageStim(
     win=win,
     image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/right/car.png",
     mask=None,
     units="",
-    pos=(0.5, 0.0),
-    size=None,  # (0.25, 0.1),  # value is % of screen size
+    pos=(-10, 0),
+    size=(0.25, 0.1),  # value is % of screen size
     anchor="topleft",
     ori=0,
     color=(1, 1, 1),
@@ -277,30 +255,6 @@ img = visual.ImageStim(
     autoLog=None,
     maskParams=None,
 )
-trialComponents.append(img)
-
-button = visual.ButtonStim(
-    win,
-    text,
-    font="Arvo",
-    pos=(0, 0),
-    size=None,
-    padding=None,
-    anchor="center",
-    units=None,
-    color="white",
-    fillColor="darkgrey",
-    borderColor=None,
-    borderWidth=0,
-    colorSpace="rgb",
-    opacity=None,
-    letterHeight=None,
-    bold=True,
-    italic=False,
-    name="",
-    autoLog=None,
-)
-# trialComponents.append(button)
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -335,10 +289,13 @@ for thisTrial in trials:
     # --- Prepare to start Routine "trial" ---
     continueRoutine = True
     routineForceEnded = False
-
+    # update component parameters for each repeat
+    slider.reset()
+    slider_2.reset()
+    textbox.reset()
+    # keep track of which components have finished
+    trialComponents = [slider, slider_2, textbox, text, img]
     for thisComponent in trialComponents:
-        if hasattr(thisComponent, "reset"):
-            thisComponent.reset()
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -358,17 +315,61 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        for thisComponent in trialComponents:
-            updateComponent(thisComponent)
+
+        # *image* updates
+        if img.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            import pdb
+
+            pdb.set_trace()
+            # keep track of start time/frame for later
+            img.frameNStart = frameN  # exact frame index
+            img.tStart = t  # local t and not account for scr refresh
+            img.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(img, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "img.started")
+            img.setAutoDraw(True)
+
+        # *slider* updates
+        if slider.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # keep track of start time/frame for later
+            slider.frameNStart = frameN  # exact frame index
+            slider.tStart = t  # local t and not account for scr refresh
+            slider.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(slider, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "slider.started")
+            slider.setAutoDraw(True)
 
         # Check slider for response to end routine
         if slider.getRating() is not None and slider.status == STARTED:
             continueRoutine = False
 
+        # *slider_2* updates
+        if slider_2.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # keep track of start time/frame for later
+            slider_2.frameNStart = frameN  # exact frame index
+            slider_2.tStart = t  # local t and not account for scr refresh
+            slider_2.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(slider_2, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "slider_2.started")
+            slider_2.setAutoDraw(True)
+
         # Check slider_2 for response to end routine
         if slider_2.getRating() is not None and slider_2.status == STARTED:
             continueRoutine = False
 
+        # *textbox* updates
+        if textbox.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # keep track of start time/frame for later
+            textbox.frameNStart = frameN  # exact frame index
+            textbox.tStart = t  # local t and not account for scr refresh
+            textbox.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(textbox, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "textbox.started")
+            textbox.setAutoDraw(True)
         if textbox.status == STARTED:
             pass
             # # is it time to stop? (based on global clock, using actual start)

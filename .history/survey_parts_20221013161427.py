@@ -62,7 +62,7 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
+def updateComponent(component):
     if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
         # keep track of start time/frame for later
         component.frameNStart = frameN  # exact frame index
@@ -335,10 +335,13 @@ for thisTrial in trials:
     # --- Prepare to start Routine "trial" ---
     continueRoutine = True
     routineForceEnded = False
-
+    # update component parameters for each repeat
+    slider.reset()
+    slider_2.reset()
+    textbox.reset()
+    # keep track of which components have finished
+    trialComponents = [slider, slider_2, textbox, text, img]
     for thisComponent in trialComponents:
-        if hasattr(thisComponent, "reset"):
-            thisComponent.reset()
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None

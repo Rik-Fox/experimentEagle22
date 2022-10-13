@@ -62,7 +62,7 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
+def updateComponent(component):
     if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
         # keep track of start time/frame for later
         component.frameNStart = frameN  # exact frame index
@@ -208,8 +208,6 @@ slider_2 = visual.Slider(
     depth=-1,
     readOnly=False,
 )
-trialComponents.append(slider_2)
-
 textbox = visual.TextBox2(
     win,
     text="Any text\n\nincluding line breaks",
@@ -236,25 +234,21 @@ textbox = visual.TextBox2(
     name="textbox",
     autoLog=True,
 )
-trialComponents.append(textbox)
-
-text = visual.TextStim(
-    win=win,
-    name="text",
-    text="Any text\n\nincluding line breaks",
-    font="Open Sans",
-    pos=(0, 0),
-    height=0.05,
-    wrapWidth=None,
-    ori=0.0,
-    color="white",
-    colorSpace="rgb",
-    opacity=None,
-    languageStyle="LTR",
-    depth=-3.0,
-)
-# trialComponents.append(text)
-
+# text = visual.TextStim(
+#     win=win,
+#     name="text",
+#     text="Any text\n\nincluding line breaks",
+#     font="Open Sans",
+#     pos=(0, 0),
+#     height=0.05,
+#     wrapWidth=None,
+#     ori=0.0,
+#     color="white",
+#     colorSpace="rgb",
+#     opacity=None,
+#     languageStyle="LTR",
+#     depth=-3.0,
+# )
 img = visual.ImageStim(
     win=win,
     image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/right/car.png",
@@ -277,8 +271,6 @@ img = visual.ImageStim(
     autoLog=None,
     maskParams=None,
 )
-trialComponents.append(img)
-
 button = visual.ButtonStim(
     win,
     text,
@@ -300,8 +292,6 @@ button = visual.ButtonStim(
     name="",
     autoLog=None,
 )
-# trialComponents.append(button)
-
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = (
@@ -335,10 +325,13 @@ for thisTrial in trials:
     # --- Prepare to start Routine "trial" ---
     continueRoutine = True
     routineForceEnded = False
-
+    # update component parameters for each repeat
+    slider.reset()
+    slider_2.reset()
+    textbox.reset()
+    # keep track of which components have finished
+    trialComponents = [slider, slider_2, textbox, text, img]
     for thisComponent in trialComponents:
-        if hasattr(thisComponent, "reset"):
-            thisComponent.reset()
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None

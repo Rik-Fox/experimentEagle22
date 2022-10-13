@@ -62,7 +62,7 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
+def updateComponent(component):
     if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
         # keep track of start time/frame for later
         component.frameNStart = frameN  # exact frame index

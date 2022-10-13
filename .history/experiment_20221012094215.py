@@ -1,8 +1,48 @@
+from pygame_ped_env.agents import (
+    RLVehicle,
+    KeyboardPedestrian,
+)
+from stable_baselines3 import DQN
+import gym
+
+
+def runCrossingSim(load_path, pygame_window_size=[720, 576]):
+    agent = RLVehicle(
+        [0, pygame_window_size[1] / 2],
+        [pygame_window_size[0], pygame_window_size[1] / 2],
+        "car",
+        "right",
+    )
+
+    agent.model = DQN.load(load_path)
+
+    env = agent.model.get_env()
+    if env is None:
+        agent.model.set_env(
+            gym.make(
+                "pygame_ped_env:ped_env-v1",
+                sim_area=pygame_window_size,
+                controllable_sprites=[
+                    agent,
+                    KeyboardPedestrian(
+                        pygame_window_size[0] / 2, pygame_window_size[1] * (7 / 8), "up"
+                    ),
+                    # RandomPedestrian(pygame_window_size[0] / 2, pygame_window_size[1] * (7 / 8), "up"),
+                ],
+                headless=False,
+                seed=4321,
+            )
+        )
+        env = agent.model.get_env()
+
+    env.envs[0].env.run()
+
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on October 10, 2022, at 20:11
+    on September 29, 2022, at 17:57
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -62,24 +102,12 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
-    if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        component.frameNStart = frameN  # exact frame index
-        component.tStart = t  # local t and not account for scr refresh
-        component.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(component, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, f"{component.name}.started")
-        component.setAutoDraw(True)
-
-
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 # Store info about the experiment session
 psychopyVersion = "2022.2.4"
-expName = "survey_parts"  # from the Builder filename that created this script
+expName = "testing"  # from the Builder filename that created this script
 expInfo = {
     "participant": f"{randint(0, 999999):06.0f}",
     "session": "001",
@@ -105,7 +133,7 @@ thisExp = data.ExperimentHandler(
     version="",
     extraInfo=expInfo,
     runtimeInfo=None,
-    originPath="C:\\Users\\rfox\\Documents\\survey_parts.py",
+    originPath="C:\\Users\\rfox\\PhD\\Term1_experiments_22\\behavioural_data_collection\\experiment.py",
     savePickle=True,
     saveWideText=True,
     dataFileName=filename,
@@ -118,10 +146,14 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 frameTolerance = 0.001  # how close to onset before 'same' frame
 
 # Start Code - component code to be run after the window creation
+# from psychopy.visual.backends import pygamebackend
+# from psychopy.visual import Window
+# class pygameWindow(Window):
+#     pass
 
 # --- Setup the Window ---
 win = visual.Window(
-    size=(1024, 768),
+    size=[1920, 1080],
     fullscr=False,
     screen=0,
     winType="pyglet",
@@ -133,13 +165,24 @@ win = visual.Window(
     useFBO=True,
     units="height",
 )
-win.mouseVisible = False
+win.mouseVisible = True
 # store frame rate of monitor if we can measure it
 expInfo["frameRate"] = win.getActualFrameRate()
 if expInfo["frameRate"] != None:
     frameDur = 1.0 / round(expInfo["frameRate"])
 else:
     frameDur = 1.0 / 60.0  # could not measure, so guess
+
+runCrossingSim(
+    load_path=os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "logs",
+        "Thu_Sep_29_16;48;02_2022",
+        "DQN_testing_1",
+        "best.zip",
+    )
+)
+
 # --- Setup input devices ---
 ioConfig = {}
 
@@ -156,151 +199,25 @@ eyetracker = None
 defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
 # --- Initialize components for Routine "trial" ---
-
-trialComponents = []
-slider = visual.Slider(
+key_resp = keyboard.Keyboard()
+image = visual.ImageStim(
     win=win,
-    name="slider",
-    startValue=None,
-    size=(1.0, 0.1),
-    pos=(0, -0.4),
-    units=None,
-    labels=None,
-    ticks=(1, 2, 3, 4, 5),
-    granularity=0.0,
-    style="rating",
-    styleTweaks=(),
-    opacity=None,
-    labelColor="LightGray",
-    markerColor="Red",
-    lineColor="White",
-    colorSpace="rgb",
-    font="Open Sans",
-    labelHeight=0.05,
-    flip=False,
-    ori=0.0,
-    depth=0,
-    readOnly=False,
-)
-trialComponents.append(slider)
-
-slider_2 = visual.Slider(
-    win=win,
-    name="slider_2",
-    startValue=None,
-    size=(1.0, 0.1),
-    pos=(0, -0.4),
-    units=None,
-    labels=None,
-    ticks=(1, 2, 3, 4, 5),
-    granularity=0.0,
-    style="rating",
-    styleTweaks=(),
-    opacity=None,
-    labelColor="LightGray",
-    markerColor="Red",
-    lineColor="White",
-    colorSpace="rgb",
-    font="Open Sans",
-    labelHeight=0.05,
-    flip=False,
-    ori=0.0,
-    depth=-1,
-    readOnly=False,
-)
-trialComponents.append(slider_2)
-
-textbox = visual.TextBox2(
-    win,
-    text="Any text\n\nincluding line breaks",
-    font="Open Sans",
-    pos=(0, 0),
-    letterHeight=0.05,
-    size=(None, None),
-    borderWidth=2.0,
-    color="white",
-    colorSpace="rgb",
-    opacity=None,
-    bold=False,
-    italic=False,
-    lineSpacing=1.0,
-    padding=0.0,
-    alignment="center",
-    anchor="center",
-    fillColor=None,
-    borderColor=None,
-    flipHoriz=False,
-    flipVert=False,
-    languageStyle="LTR",
-    editable=False,
-    name="textbox",
-    autoLog=True,
-)
-trialComponents.append(textbox)
-
-text = visual.TextStim(
-    win=win,
-    name="text",
-    text="Any text\n\nincluding line breaks",
-    font="Open Sans",
-    pos=(0, 0),
-    height=0.05,
-    wrapWidth=None,
-    ori=0.0,
-    color="white",
-    colorSpace="rgb",
-    opacity=None,
-    languageStyle="LTR",
-    depth=-3.0,
-)
-# trialComponents.append(text)
-
-img = visual.ImageStim(
-    win=win,
-    image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/right/car.png",
+    name="image",
+    image=None,
     mask=None,
-    units="",
-    pos=(0.5, 0.0),
-    size=None,  # (0.25, 0.1),  # value is % of screen size
-    anchor="topleft",
-    ori=0,
-    color=(1, 1, 1),
+    anchor="center",
+    ori=0.0,
+    pos=(0, 0),
+    size=(0.5, 0.5),
+    color=[1, 1, 1],
     colorSpace="rgb",
-    contrast=1,
     opacity=None,
-    depth=0,
-    interpolate=False,
     flipHoriz=False,
     flipVert=False,
-    texRes=128,
-    name="car",
-    autoLog=None,
-    maskParams=None,
+    texRes=128.0,
+    interpolate=True,
+    depth=-1.0,
 )
-trialComponents.append(img)
-
-button = visual.ButtonStim(
-    win,
-    text,
-    font="Arvo",
-    pos=(0, 0),
-    size=None,
-    padding=None,
-    anchor="center",
-    units=None,
-    color="white",
-    fillColor="darkgrey",
-    borderColor=None,
-    borderWidth=0,
-    colorSpace="rgb",
-    opacity=None,
-    letterHeight=None,
-    bold=True,
-    italic=False,
-    name="",
-    autoLog=None,
-)
-# trialComponents.append(button)
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -310,7 +227,7 @@ routineTimer = (
 
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(
-    nReps=2.0,
+    nReps=5.0,
     method="random",
     extraInfo=expInfo,
     originPath=-1,
@@ -335,10 +252,13 @@ for thisTrial in trials:
     # --- Prepare to start Routine "trial" ---
     continueRoutine = True
     routineForceEnded = False
-
+    # update component parameters for each repeat
+    key_resp.keys = []
+    key_resp.rt = []
+    _key_resp_allKeys = []
+    # keep track of which components have finished
+    trialComponents = [key_resp, image]
     for thisComponent in trialComponents:
-        if hasattr(thisComponent, "reset"):
-            thisComponent.reset()
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -358,48 +278,46 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        for thisComponent in trialComponents:
-            updateComponent(thisComponent)
 
-        # Check slider for response to end routine
-        if slider.getRating() is not None and slider.status == STARTED:
-            continueRoutine = False
+        # *key_resp* updates
+        waitOnFlip = False
+        if key_resp.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # keep track of start time/frame for later
+            key_resp.frameNStart = frameN  # exact frame index
+            key_resp.tStart = t  # local t and not account for scr refresh
+            key_resp.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(key_resp, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "key_resp.started")
+            key_resp.status = STARTED
+            # keyboard checking is just starting
+            waitOnFlip = True
+            win.callOnFlip(key_resp.clock.reset)  # t=0 on next screen flip
+            win.callOnFlip(
+                key_resp.clearEvents, eventType="keyboard"
+            )  # clear events on next screen flip
+        if key_resp.status == STARTED and not waitOnFlip:
+            theseKeys = key_resp.getKeys(
+                keyList=["w", "a", "s", "d", "up", "down", "left", "right"],
+                waitRelease=False,
+            )
+            _key_resp_allKeys.extend(theseKeys)
+            if len(_key_resp_allKeys):
+                key_resp.keys = [
+                    key.name for key in _key_resp_allKeys
+                ]  # storing all keys
+                key_resp.rt = [key.rt for key in _key_resp_allKeys]
 
-        # Check slider_2 for response to end routine
-        if slider_2.getRating() is not None and slider_2.status == STARTED:
-            continueRoutine = False
-
-        if textbox.status == STARTED:
-            pass
-            # # is it time to stop? (based on global clock, using actual start)
-            # if tThisFlipGlobal > textbox.tStartRefresh + 1.0-frameTolerance:
-            #     # keep track of stop time/frame for later
-            #     textbox.tStop = t  # not accounting for scr refresh
-            #     textbox.frameNStop = frameN  # exact frame index
-            #     # add timestamp to datafile
-            #     thisExp.timestampOnFlip(win, 'textbox.stopped')
-            #     textbox.setAutoDraw(False)
-
-        # # *text* updates
-        # if text.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        #     # keep track of start time/frame for later
-        #     text.frameNStart = frameN  # exact frame index
-        #     text.tStart = t  # local t and not account for scr refresh
-        #     text.tStartRefresh = tThisFlipGlobal  # on global time
-        #     win.timeOnFlip(text, "tStartRefresh")  # time at next scr refresh
-        #     # add timestamp to datafile
-        #     thisExp.timestampOnFlip(win, "text.started")
-        #     text.setAutoDraw(True)
-        # if text.status == STARTED:
-        #     # is it time to stop? (based on global clock, using actual start)
-        #     if tThisFlipGlobal > text.tStartRefresh + 1.0 - frameTolerance:
-        #         pass
-        #         # # keep track of stop time/frame for later
-        #         # text.tStop = t  # not accounting for scr refresh
-        #         # text.frameNStop = frameN  # exact frame index
-        #         # # add timestamp to datafile
-        #         # thisExp.timestampOnFlip(win, "text.stopped")
-        #         # text.setAutoDraw(False)
+        # *image* updates
+        if image.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # keep track of start time/frame for later
+            image.frameNStart = frameN  # exact frame index
+            image.tStart = t  # local t and not account for scr refresh
+            image.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(image, "tStartRefresh")  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, "image.started")
+            image.setAutoDraw(True)
 
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -427,15 +345,17 @@ for thisTrial in trials:
     for thisComponent in trialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    trials.addData("slider.response", slider.getRating())
-    trials.addData("slider.rt", slider.getRT())
-    trials.addData("slider_2.response", slider_2.getRating())
-    trials.addData("slider_2.rt", slider_2.getRT())
+    # check responses
+    if key_resp.keys in ["", [], None]:  # No response was made
+        key_resp.keys = None
+    trials.addData("key_resp.keys", key_resp.keys)
+    if key_resp.keys != None:  # we had a response
+        trials.addData("key_resp.rt", key_resp.rt)
     # the Routine "trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
 
-# completed 2.0 repeats of 'trials'
+# completed 5.0 repeats of 'trials'
 
 
 # --- End experiment ---

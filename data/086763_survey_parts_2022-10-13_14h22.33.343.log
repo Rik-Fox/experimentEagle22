@@ -1,0 +1,91 @@
+1.0696 	WARNING 	We strongly recommend you activate the PTB sound engine in PsychoPy prefs as the preferred audio engine. Its timing is vastly superior. Your prefs are currently set to use ['sounddevice', 'PTB', 'pyo', 'pygame'] (in that order).
+40.9250 	WARNING 	User requested fullscreen with size [1024  768], but screen is actually [1680, 1050]. Using actual size
+41.7141 	EXP 	Created window1 = Window(allowGUI=True, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x7f8fea117670>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x7f8fe004c3d0>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1680, 1050]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+41.7142 	EXP 	window1: mouseVisible = True
+41.7158 	EXP 	window1: mouseVisible = False
+41.7158 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+41.7158 	EXP 	window1: recordFrameIntervals = False
+41.8811 	EXP 	window1: recordFrameIntervals = True
+42.0983 	EXP 	Screen (0) actual frame rate measured at 60.56Hz
+42.0984 	EXP 	window1: recordFrameIntervals = False
+43.8167 	EXP 	window1: mouseVisible = True
+43.8374 	EXP 	Created slider = Slider(__class__=<class 'psychopy.visual.slider.Slider'>, autoDraw=False, autoLog=True, borderColor=None, color=None, colorSpace='rgb', depth=0, fillColor=None, flip=False, font='Open Sans', granularity=0.0, labelColor=None, labelHeight=0.05, labelWrapWidth=None, labels=None, lineColor=None, markerColor=None, name='slider', opacity=None, ori=0.0, pos=array([ 0. , -0.4]), readOnly=False, self=UNKNOWN, size=array([1. , 0.1]), startValue=None, style='rating', styleTweaks=[], ticks=array([1, 2, 3, 4, 5]), units='height', win=Window(...))
+43.8397 	EXP 	window1: mouseVisible = True
+43.8513 	EXP 	Created slider_2 = Slider(__class__=<class 'psychopy.visual.slider.Slider'>, autoDraw=False, autoLog=True, borderColor=None, color=None, colorSpace='rgb', depth=-1, fillColor=None, flip=False, font='Open Sans', granularity=0.0, labelColor=None, labelHeight=0.05, labelWrapWidth=None, labels=None, lineColor=None, markerColor=None, name='slider_2', opacity=None, ori=0.0, pos=array([ 0. , -0.4]), readOnly=False, self=UNKNOWN, size=array([1. , 0.1]), startValue=None, style='rating', styleTweaks=[], ticks=array([1, 2, 3, 4, 5]), units='height', win=Window(...))
+43.9894 	EXP 	Created text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1, 1, 1]), colorSpace='rgb', contrast=1.0, depth=-3.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='Any text\n\nincluding line breaks', units='height', win=Window(...), wrapWidth=1)
+43.9906 	EXP 	Created sequence: random, trialTypes=1, nReps=2, seed=None
+43.9910 	EXP 	New trial (rep=0, index=0): None
+44.0103 	EXP 	slider: autoLog = True
+44.0103 	EXP 	slider: markerPos = None
+44.0103 	EXP 	slider: styleTweaks = []
+44.0103 	EXP 	slider: styleTweaks = []
+44.0103 	EXP 	slider: styleTweaks = []
+44.0103 	EXP 	slider: styleTweaks = []
+44.0103 	EXP 	slider: contrast = 1.0
+44.0103 	EXP 	slider: autoLog = True
+44.0103 	EXP 	slider_2: autoLog = True
+44.0103 	EXP 	slider_2: markerPos = None
+44.0103 	EXP 	slider_2: styleTweaks = []
+44.0103 	EXP 	slider_2: styleTweaks = []
+44.0103 	EXP 	slider_2: styleTweaks = []
+44.0103 	EXP 	slider_2: styleTweaks = []
+44.0103 	EXP 	slider_2: contrast = 1.0
+44.0103 	EXP 	slider_2: autoLog = True
+44.0103 	EXP 	textbox: autoLog = True
+44.0103 	EXP 	slider: markerPos = None
+44.0103 	EXP 	slider: markerPos = None
+44.0103 	EXP 	slider_2: markerPos = None
+44.0103 	EXP 	slider_2: markerPos = None
+44.0103 	EXP 	slider: autoDraw = True
+44.0103 	EXP 	slider_2: autoDraw = True
+44.0103 	EXP 	textbox: autoDraw = True
+44.0103 	EXP 	text: autoDraw = True
+50.1585 	DATA 	Mouse: Left button down, pos=(842,108)
+50.1758 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.1993 	EXP 	slider: markerPos = 3.0076190476190474
+50.1993 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2196 	EXP 	slider: markerPos = 3.0076190476190474
+50.2196 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2349 	EXP 	slider: markerPos = 3.0076190476190474
+50.2349 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2508 	EXP 	slider: markerPos = 3.0076190476190474
+50.2508 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2649 	EXP 	slider: markerPos = 3.0076190476190474
+50.2649 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2678 	DATA 	Mouse:  Left button up, pos=(842,108)
+50.2918 	EXP 	slider: markerPos = 3.0076190476190474
+50.2918 	EXP 	slider_2: markerPos = 3.0076190476190474
+50.2959 	EXP 	New trial (rep=1, index=0): None
+50.3141 	EXP 	slider: autoDraw = False
+50.3141 	EXP 	slider_2: autoDraw = False
+50.3141 	EXP 	textbox: autoDraw = False
+50.3141 	EXP 	text: autoDraw = False
+50.3141 	EXP 	slider: markerPos = None
+50.3141 	EXP 	slider: markerPos = None
+50.3141 	EXP 	slider_2: markerPos = None
+50.3141 	EXP 	slider_2: markerPos = None
+50.3141 	EXP 	slider: autoDraw = True
+50.3141 	EXP 	slider_2: autoDraw = True
+50.3141 	EXP 	textbox: autoDraw = True
+50.3141 	EXP 	text: autoDraw = True
+51.3412 	DATA 	Mouse: Left button down, pos=(842,108)
+51.3819 	EXP 	slider: markerPos = 3.0076190476190474
+51.3819 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.3982 	EXP 	slider: markerPos = 3.0076190476190474
+51.3982 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4106 	EXP 	slider: markerPos = 3.0076190476190474
+51.4106 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4240 	EXP 	slider: markerPos = 3.0076190476190474
+51.4240 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4369 	EXP 	slider: markerPos = 3.0076190476190474
+51.4369 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4510 	EXP 	slider: markerPos = 3.0076190476190474
+51.4510 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4515 	DATA 	Mouse:  Left button up, pos=(842,108)
+51.4654 	EXP 	slider: markerPos = 3.0076190476190474
+51.4654 	EXP 	slider_2: markerPos = 3.0076190476190474
+51.4824 	EXP 	slider: autoDraw = False
+51.4824 	EXP 	slider_2: autoDraw = False
+51.4824 	EXP 	textbox: autoDraw = False
+51.4824 	EXP 	text: autoDraw = False
+51.5054 	EXP 	window1: mouseVisible = True

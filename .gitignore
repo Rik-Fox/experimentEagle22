@@ -73,5 +73,5 @@ ENV/
 !.vscode/extensions.json 
 .history
 
-# Own logs #
+# PsychoPy logs 
 data/

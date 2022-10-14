@@ -62,12 +62,12 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
-def updateComponent(component, frameN, t, tThisFlipGlobal):
+def updateComponent(component, frame, tStart, tGlobal):
     if component.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
         # keep track of start time/frame for later
-        component.frameNStart = frameN  # exact frame index
-        component.tStart = t  # local t and not account for scr refresh
-        component.tStartRefresh = tThisFlipGlobal  # on global time
+        component.frameNStart = frame  # exact frame index
+        component.tStart = tStart  # local t and not account for scr refresh
+        component.tStartRefresh = tGlobal  # on global time
         win.timeOnFlip(component, "tStartRefresh")  # time at next scr refresh
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, f"{component.name}.started")
@@ -162,11 +162,11 @@ slider = visual.Slider(
     win=win,
     name="slider",
     startValue=None,
-    size=(1.0, 0.1),
-    pos=(0, -0.4),
+    size=(1.0, 0.05),
+    pos=(0, 0.05),
     units=None,
-    labels=None,
-    ticks=(1, 2, 3, 4, 5),
+    labels=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    ticks=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     granularity=0.0,
     style="rating",
     styleTweaks=(),
@@ -176,23 +176,23 @@ slider = visual.Slider(
     lineColor="White",
     colorSpace="rgb",
     font="Open Sans",
-    labelHeight=0.05,
+    labelHeight=0.025,
     flip=False,
     ori=0.0,
     depth=0,
     readOnly=False,
 )
-trialComponents.append(slider)
+# trialComponents.append(slider)
 
 slider_2 = visual.Slider(
     win=win,
     name="slider_2",
     startValue=None,
-    size=(1.0, 0.1),
-    pos=(0, -0.4),
+    size=(1.0, 0.05),
+    pos=(0, -0.15),
     units=None,
-    labels=None,
-    ticks=(1, 2, 3, 4, 5),
+    labels=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    ticks=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     granularity=0.0,
     style="rating",
     styleTweaks=(),
@@ -202,21 +202,131 @@ slider_2 = visual.Slider(
     lineColor="White",
     colorSpace="rgb",
     font="Open Sans",
-    labelHeight=0.05,
+    labelHeight=0.025,
     flip=False,
     ori=0.0,
     depth=-1,
     readOnly=False,
 )
-trialComponents.append(slider_2)
+# trialComponents.append(slider_2)
+
+slider_3 = visual.Slider(
+    win=win,
+    name="slider_2",
+    startValue=None,
+    size=(1.0, 0.05),
+    pos=(0, -0.35),
+    units=None,
+    labels=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    ticks=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    granularity=0.0,
+    style="rating",
+    styleTweaks=(),
+    opacity=None,
+    labelColor="LightGray",
+    markerColor="Red",
+    lineColor="White",
+    colorSpace="rgb",
+    font="Open Sans",
+    labelHeight=0.025,
+    flip=False,
+    ori=0.0,
+    depth=-1,
+    readOnly=False,
+)
+# trialComponents.append(slider_3)
+
+init_textbox = visual.TextBox2(
+    win,
+    text="Please read the information sheet and hand your consent form back to the Experiment Leader\nIf you have not already done so",
+    font="Open Sans",
+    pos=(0, 0.4),
+    letterHeight=0.04,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="center",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(init_textbox)
+
+init_textbox_2 = visual.TextBox2(
+    win,
+    text="Once you comence each trial you will be asked to click to continue after which you will see the simulator below to control the pedestrian (circled) please use the arrow keys, or W,A,S and D keys if you prefer",
+    font="Open Sans",
+    pos=(0, 0.2),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="center",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(init_textbox_2)
+
+init_textbox_3 = visual.TextBox2(
+    win,
+    text="Press Space to continue",
+    font="Open Sans",
+    pos=(0, -0.45),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="center",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(init_textbox_3)
 
 textbox = visual.TextBox2(
     win,
-    text="Any text\n\nincluding line breaks",
+    text="Thank you For Particpating!\nPlease click below to end the experiment and remember to collect your Debrief before leaving.",
     font="Open Sans",
-    pos=(0, 0),
+    pos=(0, 0.2),
     letterHeight=0.05,
-    size=(None, None),
+    size=(1, 0.2),
     borderWidth=2.0,
     color="white",
     colorSpace="rgb",
@@ -238,6 +348,118 @@ textbox = visual.TextBox2(
 )
 trialComponents.append(textbox)
 
+textbox2 = visual.TextBox2(
+    win,
+    text="N.B. by clicking you are confirming your consent for your data to be used and it will no longer be able to be withdrawn",
+    font="Open Sans",
+    pos=(0, -0.1),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="center",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+trialComponents.append(textbox2)
+
+Q1 = visual.TextBox2(
+    win,
+    text="Speed",
+    font="Open Sans",
+    pos=(0, 0.125),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="left",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(Q1)
+
+Q2 = visual.TextBox2(
+    win,
+    text="Positioning",
+    font="Open Sans",
+    pos=(0, -0.075),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="left",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(Q2)
+
+Q3 = visual.TextBox2(
+    win,
+    text="Steering",
+    font="Open Sans",
+    pos=(0, -0.275),
+    letterHeight=0.03,
+    size=(1, 0.2),
+    borderWidth=2.0,
+    color="white",
+    colorSpace="rgb",
+    opacity=None,
+    bold=False,
+    italic=False,
+    lineSpacing=1.0,
+    padding=0.0,
+    alignment="left",
+    anchor="center",
+    fillColor=None,
+    borderColor=None,
+    flipHoriz=False,
+    flipVert=False,
+    languageStyle="LTR",
+    editable=False,
+    name="textbox",
+    autoLog=True,
+)
+# trialComponents.append(Q3)
+
 text = visual.TextStim(
     win=win,
     name="text",
@@ -255,13 +477,13 @@ text = visual.TextStim(
 )
 # trialComponents.append(text)
 
-img = visual.ImageStim(
+car_img = visual.ImageStim(
     win=win,
-    image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/right/car.png",
+    image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/Topdown_vehicle_sprites_pack/car.png",
     mask=None,
     units="",
-    pos=(0.5, 0.0),
-    size=None,  # (0.25, 0.1),  # value is % of screen size
+    pos=(-0.175, 0.4),
+    size=None,  # (0.2, 0.1),  # value is % of screen size
     anchor="topleft",
     ori=0,
     color=(1, 1, 1),
@@ -277,14 +499,110 @@ img = visual.ImageStim(
     autoLog=None,
     maskParams=None,
 )
-trialComponents.append(img)
+# trialComponents.append(car_img)
+
+car_img_2 = visual.ImageStim(
+    win=win,
+    image="/home/rfox/PhD/Term1_22-23_Experiements/pygame_ped_env/pygame_ped_env/images/Topdown_vehicle_sprites_pack/car2.png",
+    mask=None,
+    units="",
+    pos=(-0.175, -0.05),
+    size=None,  # (0.2, 0.1),  # value is % of screen size
+    anchor="topleft",
+    ori=0,
+    color=(1, 1, 1),
+    colorSpace="rgb",
+    contrast=1,
+    opacity=None,
+    depth=0,
+    interpolate=False,
+    flipHoriz=False,
+    flipVert=False,
+    texRes=128,
+    name="car",
+    autoLog=None,
+    maskParams=None,
+)
+# trialComponents.append(car_img_2)
+
+wasd_img = visual.ImageStim(
+    win=win,
+    image="/home/rfox/PhD/Term1_22-23_Experiements/experimentEagle22/images/SeekPng.com_wasd-png_1791627.png",
+    mask=None,
+    units="",
+    pos=(0.3, -0.2),
+    size=(0.225, 0.15),  # value is % of screen size
+    anchor="topleft",
+    ori=0,
+    color=(1, 1, 1),
+    colorSpace="rgb",
+    contrast=1,
+    opacity=None,
+    depth=0,
+    interpolate=False,
+    flipHoriz=False,
+    flipVert=False,
+    texRes=128,
+    name="car",
+    autoLog=None,
+    maskParams=None,
+)
+# trialComponents.append(wasd_img)
+
+arrow_img = visual.ImageStim(
+    win=win,
+    image="/home/rfox/PhD/Term1_22-23_Experiements/experimentEagle22/images/SeekPng.com_arrow-keys-png_3271603.png",
+    mask=None,
+    units="",
+    pos=(-0.5, -0.2),
+    size=(0.225, 0.15),  # value is % of screen size
+    anchor="topleft",
+    ori=0,
+    color=(1, 1, 1),
+    colorSpace="rgb",
+    contrast=1,
+    opacity=None,
+    depth=0,
+    interpolate=False,
+    flipHoriz=False,
+    flipVert=False,
+    texRes=128,
+    name="car",
+    autoLog=None,
+    maskParams=None,
+)
+# trialComponents.append(arrow_img)
+
+sim_img = visual.ImageStim(
+    win=win,
+    image="/home/rfox/PhD/Term1_22-23_Experiements/experimentEagle22/images/Simulator.png",
+    mask=None,
+    units="",
+    pos=(-0.25, 0.1),
+    size=(0.5, 0.5),  # value is % of screen size
+    anchor="topleft",
+    ori=0,
+    color=(1, 1, 1),
+    colorSpace="rgb",
+    contrast=1,
+    opacity=None,
+    depth=0,
+    interpolate=False,
+    flipHoriz=False,
+    flipVert=False,
+    texRes=128,
+    name="car",
+    autoLog=None,
+    maskParams=None,
+)
+# trialComponents.append(sim_img)
 
 button = visual.ButtonStim(
     win,
-    text,
+    "Click Here to Finish Experiment",
     font="Arvo",
-    pos=(0, 0),
-    size=None,
+    pos=(0, -0.3),
+    size=(0.4, 0.2),
     padding=None,
     anchor="center",
     units=None,
@@ -300,7 +618,7 @@ button = visual.ButtonStim(
     name="",
     autoLog=None,
 )
-# trialComponents.append(button)
+trialComponents.append(button)
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -358,8 +676,19 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
+
+        # for thisComponent in instanceStartComponents:
+        #     updateComponent(thisComponent, frameN, t, tThisFlipGlobal)
+        # waitKeys(self, maxWait=float('inf'), keyList=None, waitRelease=True,
+        #          clear=True)
+
         for thisComponent in trialComponents:
-            updateComponent(thisComponent)
+            updateComponent(thisComponent, frameN, t, tThisFlipGlobal)
+
+        if button.isClicked and button.status == STARTED:
+            continueRoutine = False
+        elif defaultKeyboard.getKeys(keyList=["space"]):
+            continueRoutine = False
 
         # Check slider for response to end routine
         if slider.getRating() is not None and slider.status == STARTED:
@@ -369,27 +698,16 @@ for thisTrial in trials:
         if slider_2.getRating() is not None and slider_2.status == STARTED:
             continueRoutine = False
 
-        if textbox.status == STARTED:
-            pass
-            # # is it time to stop? (based on global clock, using actual start)
-            # if tThisFlipGlobal > textbox.tStartRefresh + 1.0-frameTolerance:
-            #     # keep track of stop time/frame for later
-            #     textbox.tStop = t  # not accounting for scr refresh
-            #     textbox.frameNStop = frameN  # exact frame index
-            #     # add timestamp to datafile
-            #     thisExp.timestampOnFlip(win, 'textbox.stopped')
-            #     textbox.setAutoDraw(False)
+        # if textbox.status == STARTED:
+        #     # is it time to stop? (based on global clock, using actual start)
+        #     if tThisFlipGlobal > textbox.tStartRefresh + 1.0-frameTolerance:
+        #         # keep track of stop time/frame for later
+        #         textbox.tStop = t  # not accounting for scr refresh
+        #         textbox.frameNStop = frameN  # exact frame index
+        #         # add timestamp to datafile
+        #         thisExp.timestampOnFlip(win, 'textbox.stopped')
+        #         textbox.setAutoDraw(False)
 
-        # # *text* updates
-        # if text.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        #     # keep track of start time/frame for later
-        #     text.frameNStart = frameN  # exact frame index
-        #     text.tStart = t  # local t and not account for scr refresh
-        #     text.tStartRefresh = tThisFlipGlobal  # on global time
-        #     win.timeOnFlip(text, "tStartRefresh")  # time at next scr refresh
-        #     # add timestamp to datafile
-        #     thisExp.timestampOnFlip(win, "text.started")
-        #     text.setAutoDraw(True)
         # if text.status == STARTED:
         #     # is it time to stop? (based on global clock, using actual start)
         #     if tThisFlipGlobal > text.tStartRefresh + 1.0 - frameTolerance:

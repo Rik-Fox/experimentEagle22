@@ -880,217 +880,24 @@ class ExperimentRunner(object):
             0
         ]  # so we can initialise stimuli with some values
         for thisTrial in self.Trials:
-            currentLoop = self.Trials
-            # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
-            if thisTrial != None:
-                for paramName in thisTrial:
-                    exec("{} = thisTrial[paramName]".format(paramName))
-
             self.runRoutine(self.start_page, inTrial=True)
             # Run 'Begin Routine' code from Simulator 'print("Hello world")'
             self.runRoutine(self.Sim, inTrial=True)
-
             self.runRoutine(self.saftey_judgement_page, inTrial=True)
             self.runRoutine(self.av_judgements_page, inTrial=True)
         # completed 5.0 repeats of 'Trials'
 
+        self.runRoutine(self.thanks_page)
 
-# --- Prepare to start Routine "Thanks" ---
-continueRoutine = True
-routineForceEnded = False
-# update component parameters for each repeat
-key_resp_3.keys = []
-key_resp_3.rt = []
-_key_resp_3_allKeys = []
-# keep track of which components have finished
-ThanksComponents = [Thank_You, Consent_remind, button_3, key_resp_3]
-for thisComponent in ThanksComponents:
-    thisComponent.tStart = None
-    thisComponent.tStop = None
-    thisComponent.tStartRefresh = None
-    thisComponent.tStopRefresh = None
-    if hasattr(thisComponent, "status"):
-        thisComponent.status = NOT_STARTED
-# reset timers
-t = 0
-_timeToFirstFrame = win.getFutureFlipTime(clock="now")
-frameN = -1
+        # --- End experiment ---
+        # Flip one final time so any remaining win.callOnFlip()
+        # and win.timeOnFlip() tasks get executed before quitting
+        self.win.flip()
 
-# --- Run Routine "Thanks" ---
-while continueRoutine:
-    # get current time
-    t = routineTimer.getTime()
-    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
-    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-
-    # *Thank_You* updates
-    if Thank_You.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        Thank_You.frameNStart = frameN  # exact frame index
-        Thank_You.tStart = t  # local t and not account for scr refresh
-        Thank_You.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(Thank_You, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, "Thank_You.started")
-        Thank_You.setAutoDraw(True)
-    if Thank_You.status == STARTED:
-        if bool(1.0):
-            # keep track of stop time/frame for later
-            Thank_You.tStop = t  # not accounting for scr refresh
-            Thank_You.frameNStop = frameN  # exact frame index
-            # add timestamp to datafile
-            thisExp.timestampOnFlip(win, "Thank_You.stopped")
-            Thank_You.setAutoDraw(False)
-
-    # *Consent_remind* updates
-    if Consent_remind.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        Consent_remind.frameNStart = frameN  # exact frame index
-        Consent_remind.tStart = t  # local t and not account for scr refresh
-        Consent_remind.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(Consent_remind, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, "Consent_remind.started")
-        Consent_remind.setAutoDraw(True)
-    if Consent_remind.status == STARTED:
-        if bool(1.0):
-            # keep track of stop time/frame for later
-            Consent_remind.tStop = t  # not accounting for scr refresh
-            Consent_remind.frameNStop = frameN  # exact frame index
-            # add timestamp to datafile
-            thisExp.timestampOnFlip(win, "Consent_remind.stopped")
-            Consent_remind.setAutoDraw(False)
-
-    # *button_3* updates
-    if button_3.status == NOT_STARTED and tThisFlip >= 0 - frameTolerance:
-        # keep track of start time/frame for later
-        button_3.frameNStart = frameN  # exact frame index
-        button_3.tStart = t  # local t and not account for scr refresh
-        button_3.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(button_3, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, "button_3.started")
-        button_3.setAutoDraw(True)
-    if button_3.status == STARTED:
-        if bool(1.0):
-            # keep track of stop time/frame for later
-            button_3.tStop = t  # not accounting for scr refresh
-            button_3.frameNStop = frameN  # exact frame index
-            # add timestamp to datafile
-            thisExp.timestampOnFlip(win, "button_3.stopped")
-            button_3.setAutoDraw(False)
-    if button_3.status == STARTED:
-        # check whether button_3 has been pressed
-        if button_3.isClicked:
-            if not button_3.wasClicked:
-                button_3.timesOn.append(
-                    button_3.buttonClock.getTime()
-                )  # store time of first click
-                button_3.timesOff.append(
-                    button_3.buttonClock.getTime()
-                )  # store time clicked until
-            else:
-                button_3.timesOff[
-                    -1
-                ] = button_3.buttonClock.getTime()  # update time clicked until
-            if not button_3.wasClicked:
-                continueRoutine = False  # end routine when button_3 is clicked
-                None
-            button_3.wasClicked = (
-                True  # if button_3 is still clicked next frame, it is not a new click
-            )
-        else:
-            button_3.wasClicked = (
-                False  # if button_3 is clicked next frame, it is a new click
-            )
-    else:
-        button_3.wasClicked = (
-            False  # if button_3 is clicked next frame, it is a new click
-        )
-
-    # *key_resp_3* updates
-    waitOnFlip = False
-    if key_resp_3.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        key_resp_3.frameNStart = frameN  # exact frame index
-        key_resp_3.tStart = t  # local t and not account for scr refresh
-        key_resp_3.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(key_resp_3, "tStartRefresh")  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, "key_resp_3.started")
-        key_resp_3.status = STARTED
-        # keyboard checking is just starting
-        waitOnFlip = True
-        win.callOnFlip(key_resp_3.clock.reset)  # t=0 on next screen flip
-        win.callOnFlip(
-            key_resp_3.clearEvents, eventType="keyboard"
-        )  # clear events on next screen flip
-    if key_resp_3.status == STARTED and not waitOnFlip:
-        theseKeys = key_resp_3.getKeys(keyList=["space"], waitRelease=False)
-        _key_resp_3_allKeys.extend(theseKeys)
-        if len(_key_resp_3_allKeys):
-            key_resp_3.keys = _key_resp_3_allKeys[-1].name  # just the last key pressed
-            key_resp_3.rt = _key_resp_3_allKeys[-1].rt
-            # a response ends the routine
-            continueRoutine = False
-
-    # check for quit (typically the Esc key)
-    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+        # these shouldn't be strictly necessary (should auto-save)
+        self.thisExp.saveAsWideText(filename + ".csv", delim="auto")
+        self.thisExp.saveAsPickle(filename)
+        self.logging.flush()
+        # make sure everything is closed down
+        self.win.close()
         core.quit()
-
-    # check if all components have finished
-    if not continueRoutine:  # a component has requested a forced-end of Routine
-        routineForceEnded = True
-        break
-    continueRoutine = (
-        False  # will revert to True if at least one component still running
-    )
-    for thisComponent in ThanksComponents:
-        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-            continueRoutine = True
-            break  # at least one component has not yet finished
-
-    # refresh the screen
-    if (
-        continueRoutine
-    ):  # don't flip if this routine is over or we'll get a blank screen
-        win.flip()
-
-# --- Ending Routine "Thanks" ---
-for thisComponent in ThanksComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
-thisExp.addData("button_3.numClicks", button_3.numClicks)
-if button_3.numClicks:
-    thisExp.addData("button_3.timesOn", button_3.timesOn)
-    thisExp.addData("button_3.timesOff", button_3.timesOff)
-else:
-    thisExp.addData("button_3.timesOn", "")
-    thisExp.addData("button_3.timesOff", "")
-# check responses
-if key_resp_3.keys in ["", [], None]:  # No response was made
-    key_resp_3.keys = None
-thisExp.addData("key_resp_3.keys", key_resp_3.keys)
-if key_resp_3.keys != None:  # we had a response
-    thisExp.addData("key_resp_3.rt", key_resp_3.rt)
-thisExp.nextEntry()
-# the Routine "Thanks" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
-
-# --- End experiment ---
-# Flip one final time so any remaining win.callOnFlip()
-# and win.timeOnFlip() tasks get executed before quitting
-win.flip()
-
-# these shouldn't be strictly necessary (should auto-save)
-thisExp.saveAsWideText(filename + ".csv", delim="auto")
-thisExp.saveAsPickle(filename)
-logging.flush()
-# make sure everything is closed down
-if eyetracker:
-    eyetracker.setConnectionState(False)
-thisExp.abort()  # or data files will save again on exit
-self.win.close()
-core.quit()

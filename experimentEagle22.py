@@ -224,3 +224,7 @@ class ExperimentRunner(object):
         # make sure everything is closed down
         self.win.close()
         core.quit()
+
+
+if __name__ == "__main__":
+    ExperimentRunner().run()

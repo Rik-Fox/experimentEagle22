@@ -72,7 +72,9 @@ class ExperimentRunner(object):
             version="",
             extraInfo=self.expInfo,
             runtimeInfo=None,
-            originPath="/home/rfox/PhD/Term1_22-23_Experiements/experimentEagle22/experimentEagle22.py",
+            originPath=os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "experimentEagle22.py"
+            ),
             savePickle=True,
             saveWideText=True,
             dataFileName=self.logname,
@@ -91,7 +93,7 @@ class ExperimentRunner(object):
         # --- Setup the Window ---
         self.win = visual.Window(
             size=(1024, 768),
-            fullscr=True,
+            fullscr=False,
             screen=0,
             winType="pyglet",
             allowStencil=False,
@@ -124,7 +126,7 @@ class ExperimentRunner(object):
         # create a default keyboard (e.g. to check for escape)
         self.defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
-        self.pages = {page.name: page for page in initPages(self.win, self.thisExp)}
+        self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
 
         # Create some handy timers
         # to track the time since experiment started
@@ -162,7 +164,7 @@ class ExperimentRunner(object):
             # a component has requested a forced-end of Routine
             if not continueRoutine:
                 routineForceEnded = True
-                page._logObj.addData("routineForceEnded", routineForceEnded)
+                page._expLog.addData("routineForceEnded", routineForceEnded)
                 break
             # will revert to True if at least one component still running
             continueRoutine = False
@@ -203,14 +205,14 @@ class ExperimentRunner(object):
 
         trialPages = ["start_page", "Sim", "saftey_judgement_page", "av_judgement_page"]
         for page in trialPages:
-            self.Pages[page].setLogObj(self.Trials)
+            self.Pages[page].setTrialLogObj(self.Trials)
 
         for thisTrial in self.Trials:  # loop trial nReps times
             for page in trialPages:  # loop through each page in each trial
                 self.runRoutine(self.Pages[page])
         # completed 5.0 repeats of 'Trials'
 
-        self.runRoutine(self.thanks_page)
+        self.runRoutine(self.Pages["thanks_page"])
 
         # --- End experiment ---
         # Flip one final time so any remaining win.callOnFlip()
@@ -220,7 +222,7 @@ class ExperimentRunner(object):
         # these shouldn't be strictly necessary (should auto-save)
         self.thisExp.saveAsWideText(self.logname + ".csv", delim="auto")
         self.thisExp.saveAsPickle(self.logname)
-        self.logging.flush()
+        logging.flush()
         # make sure everything is closed down
         self.win.close()
         core.quit()

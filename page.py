@@ -11,6 +11,7 @@ from psychopy.constants import (
     RELEASED,
     FOREVER,
 )
+from stable_baselines3.common.vec_env.dummy_vec_env import DummyVecEnv
 
 
 class Page(object):
@@ -32,6 +33,9 @@ class Page(object):
         self._trialLog = log_obj
 
     def init(self):
+        # if any(isinstance(self.componentList, DummyVecEnv)):
+        #     return
+
         for thisComponent in self.componentList:
             if hasattr(thisComponent, "reset"):
                 thisComponent.reset()
@@ -49,9 +53,14 @@ class Page(object):
                 thisComponent._key_resp_allKeys = []
 
     def end(self):
+        # if any(isinstance(self.componentList, DummyVecEnv)):
+        #     return
+
         for thisComponent in self.componentList:
+
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
+            # autoDraw sets status, so if no autoDraw set manually
             elif hasattr(thisComponent, "status"):
                 thisComponent.status = FINISHED
 
@@ -87,6 +96,11 @@ class Page(object):
     def update(self, window, FRAME_TOLERANCE, frameN, t, tThisFlip, tThisFlipGlobal):
         continueRoutine = True
         for component in self.componentList:
+            # run sim then end routine
+            # if isinstance(component, DummyVecEnv):
+            #     component.envs[0].env.run()
+            #     continueRoutine = False
+            #     break
             # initalise component if not started yet
             if component.status == NOT_STARTED and tThisFlip >= 0.0 - FRAME_TOLERANCE:
                 # keep track of start time/frame for later
@@ -107,7 +121,7 @@ class Page(object):
                     # clear events on next screen flip
                     window.callOnFlip(component.clearEvents, eventType="keyboard")
                 # move to next component and wait for next flip to update this initalised component
-                continue
+                # continue
 
             # --- Stimulus Type Specific Updates ---
             # --- condition routine end for sliders ---

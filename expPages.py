@@ -196,7 +196,18 @@ def initPages(win, log_obj):
 
     # --- Initialize components for Routine "Simulation" ---
 
-    Sim = Page("Sim", log_obj, component_list=[])
+    # Sim = makeCrossingSim(
+    #     load_path=os.path.join(
+    #         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    #         "logs",
+    #         "Tue_Sep_27_16:03:45_2022",
+    #         "DQN_testing_1",
+    #         "best.zip",
+    #     )
+    # )
+    # Sim.name = "Sim"
+
+    sim_page = Page("sim_page", log_obj, component_list=[])
 
     # --- Initialize components for Routine "Safety_Judgements" ---
     Question = visual.TextStim(
@@ -615,8 +626,49 @@ def initPages(win, log_obj):
     return (
         intro_page,
         start_page,
-        Sim,
+        sim_page,
         saftey_judgement_page,
         av_judgement_page,
         thanks_page,
     )
+
+
+from pygame_ped_env.agents import (
+    RLVehicle,
+    KeyboardPedestrian,
+)
+from stable_baselines3 import DQN
+import gym
+
+
+def makeCrossingSim(load_path, pygame_window_size=[720, 576]):
+    agent = RLVehicle(
+        [0, pygame_window_size[1] / 2],
+        [pygame_window_size[0], pygame_window_size[1] / 2],
+        "car",
+        "right",
+    )
+
+    agent.model = DQN.load(load_path)
+
+    env = agent.model.get_env()
+    if env is None:
+        agent.model.set_env(
+            gym.make(
+                "pygame_ped_env:ped_env-v1",
+                sim_area=pygame_window_size,
+                controllable_sprites=[
+                    agent,
+                    KeyboardPedestrian(
+                        pygame_window_size[0] / 2, pygame_window_size[1] * (7 / 8), "up"
+                    ),
+                    # RandomPedestrian(pygame_window_size[0] / 2, pygame_window_size[1] * (7 / 8), "up"),
+                ],
+                headless=False,
+                seed=4321,
+            )
+        )
+        env = agent.model.get_env()
+
+    # env.envs[0].env.run()
+    return env

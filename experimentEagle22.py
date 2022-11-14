@@ -203,7 +203,12 @@ class ExperimentRunner(object):
         )
         self.thisExp.addLoop(self.Trials)  # add the loop to the experiment
 
-        trialPages = ["start_page", "Sim", "saftey_judgement_page", "av_judgement_page"]
+        trialPages = [
+            "start_page",
+            "sim_page",
+            "saftey_judgement_page",
+            "av_judgement_page",
+        ]
         for page in trialPages:
             self.Pages[page].setTrialLogObj(self.Trials)
 

@@ -95,6 +95,7 @@ class Page(object):
 
     def update(self, window, FRAME_TOLERANCE, frameN, t, tThisFlip, tThisFlipGlobal):
         continueRoutine = True
+        responsePage = False
         for component in self.componentList:
             # run sim then end routine
             # if isinstance(component, DummyVecEnv):
@@ -131,7 +132,7 @@ class Page(object):
             # --- condition routine end for images ---
             # if isinstance(component, visual.ImageStim) and component.status == STARTED:
             # --- checking for button clicks ----
-            if isinstance(component, visual.ButtonStim):
+            elif isinstance(component, visual.ButtonStim):
                 if component.status == STARTED:
                     # check whether button has been pressed
                     if component.isClicked:
@@ -161,7 +162,9 @@ class Page(object):
                     component.setAutoDraw(False)
                     continueRoutine = False
             # --- listening on keyboard ---
-            if isinstance(component, keyboard.Keyboard) and component.status == STARTED:
+            elif (
+                isinstance(component, keyboard.Keyboard) and component.status == STARTED
+            ):
                 theseKeys = component.getKeys(keyList=["space"], waitRelease=False)
                 component._key_resp_allKeys.extend(theseKeys)
                 if len(component._key_resp_allKeys):
@@ -171,15 +174,23 @@ class Page(object):
                     component.rt = component._key_resp_allKeys[-1].rt
                     # a response ends the routine
                     continueRoutine = False
+            # check for sliders here instead of looking through component list again
+            elif isinstance(component, visual.Slider):
+                responsePage = True
 
-        # TODO: refactor this to not be 2 logic checks over an array
-        if any(isinstance(comp, visual.Slider) for comp in self.componentList):
-            ratings = [
-                component.getRating()
-                for component in self.componentList
-                if isinstance(component, visual.Slider)
-            ]
-            if all(ratings):
+        # check for slider values and next button click if a response page
+        if responsePage:
+            # override basic button logic
+            continueRoutine = True
+            ratings = []
+            # have to loop over components again after update for slider values
+            for component in self.componentList:
+                if isinstance(component, visual.Slider):
+                    ratings.append(component.getRating())
+                elif isinstance(component, visual.ButtonStim):
+                    nextClick = component.wasClicked
+            # if all sliders have a value and next button has been clicked move on
+            if all(ratings) and nextClick:
                 continueRoutine = False
 
         # set up for ending the routine if not continuing

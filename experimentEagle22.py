@@ -187,6 +187,19 @@ class ExperimentRunner(object):
         # the Routines are not non-slip safe, so reset the non-slip timer
         self.routineTimer.reset()
 
+    def runSim(env, n_episodes=5):
+
+        # for ep in range(args.n_episodes):
+        for ep in range(n_episodes):
+            obs = env.reset()
+            done = False
+            while not done:
+                if env.scenarioName in ("H2", "H_l", "H_r"):
+                    obs, reward, done, info = env.step({"obs": obs})
+                else:
+                    obs, reward, done, info = env.step(env.modelL.predict(obs))
+            print(info)
+
     def run(self):
 
         self.runRoutine(self.Pages["intro_page"])

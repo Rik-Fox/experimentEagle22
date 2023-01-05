@@ -1,4 +1,4 @@
-from pygame_ped_env.agents import (
+from pygame_ped_env.entities.agents import (
     RLVehicle,
     KeyboardPedestrian,
 )

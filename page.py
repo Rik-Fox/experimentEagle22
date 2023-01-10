@@ -11,7 +11,9 @@ from psychopy.constants import (
     RELEASED,
     FOREVER,
 )
-from stable_baselines3.common.vec_env.dummy_vec_env import DummyVecEnv
+import os
+from stable_baselines3 import DQN
+from pygame_ped_env.envs import RLCrossingSim
 
 
 class Page(object):
@@ -33,7 +35,7 @@ class Page(object):
         self._trialLog = log_obj
 
     def init(self):
-        # if any(isinstance(self.componentList, DummyVecEnv)):
+        # if any(isinstance(self.componentList, Env)):
         #     return
 
         for thisComponent in self.componentList:
@@ -53,7 +55,7 @@ class Page(object):
                 thisComponent._key_resp_allKeys = []
 
     def end(self):
-        # if any(isinstance(self.componentList, DummyVecEnv)):
+        # if any(isinstance(self.componentList, Env)):
         #     return
 
         for thisComponent in self.componentList:
@@ -97,11 +99,7 @@ class Page(object):
         continueRoutine = True
         responsePage = False
         for component in self.componentList:
-            # run sim then end routine
-            # if isinstance(component, DummyVecEnv):
-            #     component.envs[0].env.run()
-            #     continueRoutine = False
-            #     break
+
             # initalise component if not started yet
             if component.status == NOT_STARTED and tThisFlip >= 0.0 - FRAME_TOLERANCE:
                 # keep track of start time/frame for later
@@ -110,8 +108,7 @@ class Page(object):
                 component.tStartRefresh = tThisFlipGlobal  # on global time
                 # time at next scr refresh
                 window.timeOnFlip(component, "tStartRefresh")
-                # add timestamp to datafile
-                self._expLog.timestampOnFlip(window, f"{component.name}.started")
+                # add timestamp to datafileEnv
                 if hasattr(component, "setAutoDraw"):
                     component.setAutoDraw(True)
                 else:
@@ -204,3 +201,56 @@ class Page(object):
                 component.setAutoDraw(False)
 
         return continueRoutine
+
+
+class SimPage(Page):
+    def __init__(
+        self,
+        page_name,
+        log_experiment,
+        log_trial=None,
+        component_list=[],
+        sim_area=(1280, 720),
+    ):
+        super().__init__(page_name, log_experiment, log_trial, component_list)
+
+        wkdir = os.path.dirname(os.path.abspath(__file__))
+        log_path = os.path.join(
+            wkdir,
+            "data",
+            "env_logs",
+        )
+
+        os.makedirs(log_path, exist_ok=True)
+
+        shapedRL_load_path = os.path.join(wkdir, "models", "shapedRL_1_1_1")
+        simpleRL_load_path = os.path.join(wkdir, "models", "simpleRL")
+
+        self.env = RLCrossingSim(
+            sim_area=sim_area,
+            scenarioList=[*range(0, 19)],
+            human_controlled_ped=True,
+            human_controlled_car=False,
+            headless=False,
+            seed=1234,
+            basic_model=simpleRL_load_path,
+            attr_model=shapedRL_load_path,
+            log_path=log_path,
+        )
+
+    def changeModel(self, model_path):
+        self.env.modelA = DQN.load(model_path, env=self.env)
+
+    def runScenario(self, scenario, model_path=None):
+        if model_path is not None:
+            self.changeModel(model_path)
+        self.env.reset(scenario=scenario)
+        obs = self.env.reset()
+        done = False
+        while not done:
+            if self.env.scenarioName in ("H2", "H_l", "H_r"):
+                obs, reward, done, info = self.env.step({"obs": obs})
+            else:
+                obs, reward, done, info = self.env.step(self.env.modelL.predict(obs))
+
+        return info

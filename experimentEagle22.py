@@ -34,6 +34,10 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 from expPages import initPages
+from gym import Env
+
+from pygame_ped_env.entities.agents import RLVehicle, KeyboardVehicle
+from page import SimPage
 
 
 class ExperimentRunner(object):
@@ -48,22 +52,23 @@ class ExperimentRunner(object):
         )
         self.expInfo = {
             "participant": f"{randint(0, 999999):06.0f}",
-            "session": "001",
         }
         # --- Show participant info dialog --
         dlg = gui.DlgFromDict(dictionary=self.expInfo, sortKeys=False, title=expName)
         if dlg.OK == False:
             core.quit()  # user pressed cancel
         self.expInfo["date"] = data.getDateStr()  # add a simple timestamp
+        dateDirname = self.expInfo["date"].split(".")[0].replace("-", "_")
         self.expInfo["expName"] = expName
         self.expInfo["psychopyVersion"] = psychopyVersion
 
         # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-        self.logname = (
-            _thisDir
-            + os.sep
-            + "data/%s_%s_%s"
-            % (self.expInfo["participant"], expName, self.expInfo["date"])
+        self.logname = os.path.join(
+            os.path.dirname(_thisDir),
+            f"data_{expName}",
+            f"participant_{self.expInfo['participant']}",
+            dateDirname,
+            "psychopyData",
         )
 
         # An ExperimentHandler isn't essential but helps with data saving
@@ -126,7 +131,13 @@ class ExperimentRunner(object):
         # create a default keyboard (e.g. to check for escape)
         self.defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
+        self.scenarioList = [0, 4, 15]
+
         self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
+
+        self.numCars = 1
+        self.colourCars = [None, None]
+        self.sjData = {"speed": None, "steering": None, "postion": None}
 
         # Create some handy timers
         # to track the time since experiment started
@@ -145,16 +156,34 @@ class ExperimentRunner(object):
         # --- Run Routine ---
         while continueRoutine:
 
-            # update/draw components on each frame
-            continueRoutine = page.update(
-                self.win,
-                self.FRAME_TOLERANCE,
-                # number of completed frames (so 0 is the first frame)
-                frameN=frameN + 1,
-                t=self.routineTimer.getTime(),
-                tThisFlip=self.win.getFutureFlipTime(clock=self.routineTimer),
-                tThisFlipGlobal=self.win.getFutureFlipTime(clock=None),
-            )
+            if isinstance(page, SimPage):
+                info = page.runScenario(self.scenarioList[self.Trials.thisN])
+                trialDir = os.path.join(
+                    os.path.dirname(self.logname), f"Trial_{self.Trials.thisN}"
+                )
+                os.makedirs(trialDir, exist_ok=True)
+                if isinstance(page.env.traffic.sprite, (RLVehicle, KeyboardVehicle)):
+                    self.numCars = 2
+                    self.colourCars[0] = page.env.vehicle.sprite.colour
+                    self.colourCars[1] = page.env.traffic.sprite.colour
+                else:
+                    self.numCars = 1
+                    self.colourCars[0] = page.env.vehicle.sprite.colour
+                    self.colourCars[1] = None
+
+                page.env.close(saveDir=trialDir, info=info)
+                continueroutine = False
+            else:
+                # update/draw components on each frame
+                continueRoutine = page.update(
+                    self.win,
+                    self.FRAME_TOLERANCE,
+                    # number of completed frames (so 0 is the first frame)
+                    frameN=frameN + 1,
+                    t=self.routineTimer.getTime(),
+                    tThisFlip=self.win.getFutureFlipTime(clock=self.routineTimer),
+                    tThisFlipGlobal=self.win.getFutureFlipTime(clock=None),
+                )
 
             # check for quit (typically the Esc key)
             if self.endExpNow or self.defaultKeyboard.getKeys(keyList=["escape"]):
@@ -187,26 +216,13 @@ class ExperimentRunner(object):
         # the Routines are not non-slip safe, so reset the non-slip timer
         self.routineTimer.reset()
 
-    def runSim(env, n_episodes=5):
-
-        # for ep in range(args.n_episodes):
-        for ep in range(n_episodes):
-            obs = env.reset()
-            done = False
-            while not done:
-                if env.scenarioName in ("H2", "H_l", "H_r"):
-                    obs, reward, done, info = env.step({"obs": obs})
-                else:
-                    obs, reward, done, info = env.step(env.modelL.predict(obs))
-            print(info)
-
     def run(self):
 
         self.runRoutine(self.Pages["intro_page"])
 
         # set up handler to look after randomisation of conditions etc
         self.Trials = data.TrialHandler(
-            nReps=5.0,
+            nReps=len(self.scenarioList),
             method="random",
             extraInfo=self.expInfo,
             originPath=-1,

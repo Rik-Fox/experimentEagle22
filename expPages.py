@@ -1,7 +1,7 @@
 import os
 from psychopy import visual, core
 from psychopy.hardware import keyboard
-from page import Page
+from page import Page, SimPage
 
 
 def initPages(win, log_obj):
@@ -34,9 +34,9 @@ def initPages(win, log_obj):
     )
     SubTitle = visual.TextBox2(
         win,
-        text="When you comence each trial you will be asked to click to continue after which you will see the simulator below to control the pedestrian (circled) please use the arrow keys, or the W,A,S and D keys if you prefer",
+        text="When you commence each trial you will be asked to click to continue after which you will see the simulator below to control the pedestrian (circled) please use the arrow keys, or the W,A,S and D keys if you prefer",
         font="Open Sans",
-        pos=(0.0, 0.25),
+        pos=(0.0, 0.5),
         letterHeight=0.03,
         size=(1, 0.2),
         borderWidth=2.0,
@@ -196,10 +196,7 @@ def initPages(win, log_obj):
 
     # --- Initialize components for Routine "Simulation" ---
 
-    Sim = makeCrossingSim()
-    Sim.name = "Sim"
-
-    sim_page = Page("sim_page", log_obj, component_list=[Sim])
+    sim_page = SimPage("sim_page", log_obj)
 
     # --- Initialize components for Routine "Safety_Judgements" ---
     Question = visual.TextStim(
@@ -221,7 +218,7 @@ def initPages(win, log_obj):
         win=win,
         name="Vehicle_image",
         image=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "images", "Car.png"
+            os.path.dirname(os.path.abspath(__file__)), "images", "red_car.png"
         ),
         mask=None,
         anchor="center",
@@ -455,7 +452,7 @@ def initPages(win, log_obj):
         win=win,
         name="car_image",
         image=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "images", "Car.png"
+            os.path.dirname(os.path.abspath(__file__)), "images", "red_car.png"
         ),
         mask=None,
         anchor="center",
@@ -499,7 +496,7 @@ def initPages(win, log_obj):
         win=win,
         name="car_image_2",
         image=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "images", "Car_2.png"
+            os.path.dirname(os.path.abspath(__file__)), "images", "blue_car.png"
         ),
         mask=None,
         anchor="center",
@@ -665,41 +662,3 @@ def initPages(win, log_obj):
         av_judgement_page,
         thanks_page,
     )
-
-
-from pygame_ped_env.envs import RLCrossingSim
-
-
-def makeCrossingSim(
-    shapedRL_load_path=None,
-    simpleRL_load_path=None,
-    sim_area=(1280, 720),
-):
-    wkdir = os.path.dirname(os.path.abspath(__file__))
-    log_path = os.path.join(
-        wkdir,
-        "data",
-        "env_logs",
-    )
-
-    os.makedirs(log_path, exist_ok=True)
-
-    if shapedRL_load_path is None:
-        shapedRL_load_path = os.path.join(wkdir, "models", "shapedRL_1_1_1")
-
-    if simpleRL_load_path is None:
-        shapedRL_load_path = os.path.join(wkdir, "models", "simpleRL")
-
-    env = RLCrossingSim(
-        sim_area=sim_area,
-        scenarioList=[*range(0, 19)],
-        human_controlled_ped=True,
-        human_controlled_car=False,
-        headless=False,
-        seed=1234,
-        basic_model=simpleRL_load_path,
-        attr_model=shapedRL_load_path,
-        log_path=log_path,
-    )
-    # env.envs[0].env.run()
-    return env

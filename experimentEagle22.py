@@ -34,7 +34,6 @@ import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 from expPages import initPages
-from gym import Env
 
 from pygame_ped_env.entities.agents import RLVehicle, KeyboardVehicle
 from page import SimPage
@@ -58,7 +57,6 @@ class ExperimentRunner(object):
         if dlg.OK == False:
             core.quit()  # user pressed cancel
         self.expInfo["date"] = data.getDateStr()  # add a simple timestamp
-        dateDirname = self.expInfo["date"].split(".")[0].replace("-", "_")
         self.expInfo["expName"] = expName
         self.expInfo["psychopyVersion"] = psychopyVersion
 
@@ -67,7 +65,6 @@ class ExperimentRunner(object):
             os.path.dirname(_thisDir),
             f"data_{expName}",
             f"participant_{self.expInfo['participant']}",
-            dateDirname,
             "psychopyData",
         )
 

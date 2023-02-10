@@ -14,6 +14,10 @@ from psychopy.constants import (
 import os
 from stable_baselines3 import DQN
 from pygame_ped_env.envs import RLCrossingSim
+from sb3_contrib.common.wrappers import ActionMasker
+from sb3_contrib.common.maskable.utils import get_action_masks
+from gym import Env
+import numpy as np
 
 
 class Page(object):
@@ -59,7 +63,6 @@ class Page(object):
         #     return
 
         for thisComponent in self.componentList:
-
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
             # autoDraw sets status, so if no autoDraw set manually
@@ -99,7 +102,6 @@ class Page(object):
         continueRoutine = True
         responsePage = False
         for component in self.componentList:
-
             # initalise component if not started yet
             if component.status == NOT_STARTED and tThisFlip >= 0.0 - FRAME_TOLERANCE:
                 # keep track of start time/frame for later
@@ -210,7 +212,7 @@ class SimPage(Page):
         log_experiment,
         log_trial=None,
         component_list=[],
-        sim_area=(1280, 720),
+        sim_area=(640, 480),
     ):
         super().__init__(page_name, log_experiment, log_trial, component_list)
 
@@ -223,12 +225,16 @@ class SimPage(Page):
 
         os.makedirs(log_path, exist_ok=True)
 
-        shapedRL_load_path = os.path.join(wkdir, "models", "shapedRL_1_1_1")
-        simpleRL_load_path = os.path.join(wkdir, "models", "simpleRL")
+        shapedRL_load_path = os.path.join(
+            wkdir, "models", "maskedDQN_at_115000000_steps"
+        )
+        simpleRL_load_path = os.path.join(
+            wkdir, "models", "maskedDQN_at_115000000_steps"
+        )
 
-        self.env = RLCrossingSim(
+        env = RLCrossingSim(
             sim_area=sim_area,
-            scenarioList=[*range(0, 19)],
+            scenarioList=[0, 1],  # [*range(0, 19)],
             human_controlled_ped=True,
             human_controlled_car=False,
             headless=False,
@@ -237,9 +243,16 @@ class SimPage(Page):
             attr_model=shapedRL_load_path,
             log_path=log_path,
         )
+        self.env = ActionMasker(env, self.mask_fn)
+
+    def mask_fn(env: Env) -> np.ndarray:
+        # Do whatever you'd like in this function to return the action mask
+        # for the current env. In this example, we assume the env has a
+        # helpful method we can rely on.
+        return env.action_masks()
 
     def changeModel(self, model_path):
-        self.env.modelA = DQN.load(model_path, env=self.env)
+        self.env.modelA._load_model_from_string(model_path)
 
     def runScenario(self, scenario, model_path=None):
         if model_path is not None:
@@ -251,6 +264,9 @@ class SimPage(Page):
             if self.env.scenarioName in ("H2", "H_l", "H_r"):
                 obs, reward, done, info = self.env.step({"obs": obs})
             else:
-                obs, reward, done, info = self.env.step(self.env.modelL.predict(obs))
+                obs, reward, done, info = self.env.step(
+                    self.env.modelL.predict(obs),
+                    action_masks=get_action_masks(self.env),
+                )
 
         return info

@@ -20,6 +20,13 @@ from gym import Env
 import numpy as np
 
 
+def mask_fn(env: Env) -> np.ndarray:
+    # Do whatever you'd like in this function to return the action mask
+    # for the current env. In this example, we assume the env has a
+    # helpful method we can rely on.
+    return env.action_masks()
+
+
 class Page(object):
     def __init__(
         self, page_name, log_experiment, log_trial=None, component_list=[]
@@ -243,13 +250,7 @@ class SimPage(Page):
             attr_model=shapedRL_load_path,
             log_path=log_path,
         )
-        self.env = ActionMasker(env, self.mask_fn)
-
-    def mask_fn(env: Env) -> np.ndarray:
-        # Do whatever you'd like in this function to return the action mask
-        # for the current env. In this example, we assume the env has a
-        # helpful method we can rely on.
-        return env.action_masks()
+        self.env = ActionMasker(env, mask_fn)
 
     def changeModel(self, model_path):
         self.env.modelA._load_model_from_string(model_path)
@@ -265,8 +266,12 @@ class SimPage(Page):
                 obs, reward, done, info = self.env.step({"obs": obs})
             else:
                 obs, reward, done, info = self.env.step(
-                    self.env.modelL.predict(obs),
-                    action_masks=get_action_masks(self.env),
+                    self.env.modelL.predict(
+                        obs, action_masks=get_action_masks(self.env)
+                    ),
                 )
 
         return info
+
+    def close(self, saveDir="./", info=None):
+        self.env.env.close(saveDir=saveDir, info=info)

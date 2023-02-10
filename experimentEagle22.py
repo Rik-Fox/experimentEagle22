@@ -128,7 +128,7 @@ class ExperimentRunner(object):
         # create a default keyboard (e.g. to check for escape)
         self.defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
-        self.scenarioList = [0, 4, 15]
+        self.scenarioList = [0, 1]
 
         self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
 
@@ -154,7 +154,7 @@ class ExperimentRunner(object):
         while continueRoutine:
 
             if isinstance(page, SimPage):
-                info = page.runScenario(self.scenarioList[self.Trials.thisN])
+                info = page.runScenario(self.scenarioList[self.Trials.thisN % 2])
                 trialDir = os.path.join(
                     os.path.dirname(self.logname), f"Trial_{self.Trials.thisN}"
                 )
@@ -168,7 +168,7 @@ class ExperimentRunner(object):
                     self.colourCars[0] = page.env.vehicle.sprite.colour
                     self.colourCars[1] = None
 
-                page.env.close(saveDir=trialDir, info=info)
+                page.close(saveDir=trialDir, info=info)
                 continueroutine = False
             else:
                 # update/draw components on each frame

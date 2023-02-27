@@ -223,6 +223,16 @@ class SimPage(Page):
     ):
         super().__init__(page_name, log_experiment, log_trial, component_list)
 
+        self.coeff_map = {
+            -3: float(1 / 4),
+            -2: float(1 / 3),
+            -1: float(1 / 2),
+            0: float(1),
+            1: float(2),
+            2: float(3),
+            3: float(4),
+        }
+
         wkdir = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(
             wkdir,
@@ -232,12 +242,10 @@ class SimPage(Page):
 
         os.makedirs(log_path, exist_ok=True)
 
-        shapedRL_load_path = os.path.join(
-            wkdir, "models", "maskedDQN_at_115000000_steps"
-        )
-        simpleRL_load_path = os.path.join(
-            wkdir, "models", "maskedDQN_at_115000000_steps"
-        )
+        self.path_to_models = os.path.join(wkdir, "models")
+
+        shapedRL_load_path = os.path.join(self.path_to_models, "maskedDQN_1.0_1.0_1.0")
+        simpleRL_load_path = os.path.join(self.path_to_models, "maskedDQN")
 
         env = RLCrossingSim(
             sim_area=sim_area,
@@ -253,11 +261,26 @@ class SimPage(Page):
         self.env = ActionMasker(env, mask_fn)
 
     def changeModel(self, model_path):
-        self.env.modelA._load_model_from_string(model_path)
+        self.env.modelA = self.env.load_model(model_path)
 
-    def runScenario(self, scenario, model_path=None):
-        if model_path is not None:
-            self.changeModel(model_path)
+    def runScenario(self, scenario, sjData=None):
+
+        if scenario < 2:
+            model_path = os.path.join(
+                self.path_to_models,
+                f"maskedDQN_{np.round(self.coeff_map[sjData['speed'][-1]],2)}_{np.round(self.coeff_map[sjData['position'][-1]],2)}_{np.round(self.coeff_map[sjData['steering'][-1]],2)}",
+            )
+            try:
+                self.changeModel(model_path)
+            except:
+                import shutil
+
+                shutil.copy(
+                    os.path.join(self.path_to_models, "maskedDQN_1.0_1.0_1.0.zip"),
+                    model_path + ".zip",
+                )
+                self.changeModel(model_path)
+
         self.env.reset(scenario=scenario)
         obs = self.env.reset()
         done = False

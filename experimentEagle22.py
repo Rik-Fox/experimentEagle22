@@ -94,7 +94,7 @@ class ExperimentRunner(object):
 
         # --- Setup the Window ---
         self.win = visual.Window(
-            size=(1024, 768),
+            size=(1280, 823),
             fullscr=False,
             screen=0,
             winType="pyglet",
@@ -128,19 +128,21 @@ class ExperimentRunner(object):
         # create a default keyboard (e.g. to check for escape)
         self.defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
-        self.scenarioList = [0, 1]
+        self.scenarioList = [0, 1, 8, 9, 16, 17]
 
         self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
 
         self.numCars = 1
         self.colourCars = [None, None]
-        self.sjData = {"speed": None, "steering": None, "postion": None}
+        self.sjData = {"speed": [0], "steering": [0], "position": [0]}
 
         # Create some handy timers
         # to track the time since experiment started
         self.globalClock = core.Clock()
         # to track time remaining of each (possibly non-slip) routine
         self.routineTimer = core.Clock()
+
+        x = [0, 1, 2]
 
     def runRoutine(self, page):
 
@@ -154,7 +156,9 @@ class ExperimentRunner(object):
         while continueRoutine:
 
             if isinstance(page, SimPage):
-                info = page.runScenario(self.scenarioList[self.Trials.thisN % 2])
+                info = page.runScenario(
+                    self.scenarioList[self.Trials.thisN % 6], self.sjData
+                )
                 trialDir = os.path.join(
                     os.path.dirname(self.logname), f"Trial_{self.Trials.thisN}"
                 )
@@ -207,6 +211,19 @@ class ExperimentRunner(object):
             if continueRoutine:
                 self.win.flip()
 
+        for thisComponent in page.componentList:
+            if isinstance(thisComponent, visual.Slider):
+                if thisComponent.name == "speed":
+                    self.sjData["speed"].append(int(np.round(thisComponent.markerPos)))
+                elif thisComponent.name == "position":
+                    self.sjData["position"].append(
+                        int(np.round(thisComponent.markerPos))
+                    )
+                elif thisComponent.name == "steering":
+                    self.sjData["steering"].append(
+                        int(np.round(thisComponent.markerPos))
+                    )
+
         page.end()
 
         self.thisExp.nextEntry()
@@ -219,7 +236,7 @@ class ExperimentRunner(object):
 
         # set up handler to look after randomisation of conditions etc
         self.Trials = data.TrialHandler(
-            nReps=len(self.scenarioList),
+            nReps=len(self.scenarioList) + 1,
             method="random",
             extraInfo=self.expInfo,
             originPath=-1,

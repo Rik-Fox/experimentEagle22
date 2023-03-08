@@ -213,16 +213,24 @@ class ExperimentRunner(object):
 
         for thisComponent in page.componentList:
             if isinstance(thisComponent, visual.Slider):
+                slider_value = thisComponent.markerPos
+                if slider_value >= 1.8:
+                    coeff_value = 2
+                elif 1.8 > slider_value >= 0.6:
+                    coeff_value = 1
+                elif 0.6 > slider_value >= -0.6:
+                    coeff_value = 0
+                elif 0.6 > slider_value >= -1.8:
+                    coeff_value = -1
+                else:
+                    coeff_value = -2
+
                 if thisComponent.name == "speed":
-                    self.sjData["speed"].append(int(np.round(thisComponent.markerPos)))
+                    self.sjData["speed"].append(coeff_value)
                 elif thisComponent.name == "position":
-                    self.sjData["position"].append(
-                        int(np.round(thisComponent.markerPos))
-                    )
+                    self.sjData["position"].append(coeff_value)
                 elif thisComponent.name == "steering":
-                    self.sjData["steering"].append(
-                        int(np.round(thisComponent.markerPos))
-                    )
+                    self.sjData["steering"].append(coeff_value)
 
         page.end()
 

@@ -156,6 +156,15 @@ class ExperimentRunner(object):
         while continueRoutine:
 
             if isinstance(page, SimPage):
+                if self.Trials.thisN % 10 == 0:
+                    self.sjData["speed"].append(0)
+                    self.sjData["steering"].append(0)
+                    self.sjData["position"].append(0)
+
+                if self.Trials.thisN % 5 == 0:
+                    scen = np.random.choice([0, 1, 16, 17])
+                else:
+                    scen = np.random.choice([8, 9])
                 info = page.runScenario(
                     self.scenarioList[self.Trials.thisN % 6], self.sjData
                 )

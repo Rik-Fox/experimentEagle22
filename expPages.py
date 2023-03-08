@@ -218,13 +218,13 @@ def initPages(win, log_obj):
         win=win,
         name="Vehicle_image",
         image=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "images", "red_car.png"
+            os.path.dirname(os.path.abspath(__file__)), "images", "silver_car.png"
         ),
         mask=None,
         anchor="center",
         ori=0.0,
         pos=(0, 0.25),
-        size=(0.3, 0.2),
+        size=(0.3, 0.15),
         color=[1, 1, 1],
         colorSpace="rgb",
         opacity=None,
@@ -452,13 +452,13 @@ def initPages(win, log_obj):
         win=win,
         name="car_image",
         image=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "images", "red_car.png"
+            os.path.dirname(os.path.abspath(__file__)), "images", "silver_car.png"
         ),
         mask=None,
         anchor="center",
         ori=0.0,
         pos=(-0.0, 0.15),
-        size=(0.2, 0.2),  # (0.5, 0.5),
+        size=(0.3, 0.15),  # (0.5, 0.5),
         color=[1, 1, 1],
         colorSpace="rgb",
         opacity=None,
@@ -473,7 +473,7 @@ def initPages(win, log_obj):
         name="slider",
         startValue=None,
         size=(1.0, -0.05),
-        pos=(0, 0.05),
+        pos=(0, -0.05),
         units=None,
         labels=(1, 2, 3, 4, 5),
         ticks=(1, 2, 3, 4, 5),
@@ -563,9 +563,9 @@ def initPages(win, log_obj):
         component_list=[
             av_question,
             car_image,
-            car_image_2,
+            # car_image_2,
             slider_4,
-            slider_5,
+            # slider_5,
             av_next_button,
         ],
     )

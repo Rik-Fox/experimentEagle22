@@ -133,8 +133,8 @@ class ExperimentRunner(object):
         self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
 
         self.numCars = 1
-        self.colourCars = [None, None]
-        self.sjData = {"speed": [0], "steering": [0], "position": [0]}
+        self.colourCars = []
+        self.sjData = {"speed": [], "steering": [], "position": []}
 
         # Create some handy timers
         # to track the time since experiment started
@@ -154,6 +154,7 @@ class ExperimentRunner(object):
 
         # --- Run Routine ---
         while continueRoutine:
+            storeJudgements = True
 
             if isinstance(page, SimPage):
                 if self.Trials.thisN % 10 == 0:
@@ -161,25 +162,31 @@ class ExperimentRunner(object):
                     self.sjData["steering"].append(0)
                     self.sjData["position"].append(0)
 
-                if self.Trials.thisN % 5 == 0:
-                    scen = np.random.choice([0, 1, 16, 17])
+                if (self.Trials.thisN + 1) % 7 == 0:
+                    scen = np.random.choice([2, 3, 4, 5])
+                    storeJudgements = False
                 else:
-                    scen = np.random.choice([8, 9])
-                info = page.runScenario(
-                    self.scenarioList[self.Trials.thisN % 6], self.sjData
-                )
+                    scen = np.random.choice([0, 1])
+                info = page.runScenario(self.scenarioList[scen], self.sjData)
                 trialDir = os.path.join(
                     os.path.dirname(self.logname), f"Trial_{self.Trials.thisN}"
                 )
                 os.makedirs(trialDir, exist_ok=True)
-                if isinstance(page.env.traffic.sprite, (RLVehicle, KeyboardVehicle)):
-                    self.numCars = 2
-                    self.colourCars[0] = page.env.vehicle.sprite.colour
-                    self.colourCars[1] = page.env.traffic.sprite.colour
-                else:
-                    self.numCars = 1
-                    self.colourCars[0] = page.env.vehicle.sprite.colour
-                    self.colourCars[1] = None
+                self.colourCars.append(page.env.vehicle.sprite.colour)
+                self.Pages["saftey_judgement_page"].componentList[
+                    1
+                ].image = os.path.join(
+                    os.path.dirname(
+                        self.Pages["saftey_judgement_page"].componentList[1].image
+                    ),
+                    f"{self.colourCars[-1]}_car.png",
+                )
+                self.Pages["av_judgement_page"].componentList[1].image = os.path.join(
+                    os.path.dirname(
+                        self.Pages["av_judgement_page"].componentList[1].image
+                    ),
+                    f"{self.colourCars[-1]}_car.png",
+                )
 
                 page.close(saveDir=trialDir, info=info)
                 continueroutine = False
@@ -221,25 +228,28 @@ class ExperimentRunner(object):
                 self.win.flip()
 
         for thisComponent in page.componentList:
-            if isinstance(thisComponent, visual.Slider):
-                slider_value = thisComponent.markerPos
-                if slider_value >= 1.8:
-                    coeff_value = 2
-                elif 1.8 > slider_value >= 0.6:
-                    coeff_value = 1
-                elif 0.6 > slider_value >= -0.6:
-                    coeff_value = 0
-                elif 0.6 > slider_value >= -1.8:
-                    coeff_value = -1
+            if isinstance(thisComponent, visual.Slider) and storeJudgements:
+                if thisComponent.name == "AV_judge":
+                    pass
                 else:
-                    coeff_value = -2
+                    slider_value = thisComponent.markerPos
+                    if slider_value >= 1.8:
+                        coeff_value = 2
+                    elif 1.8 > slider_value >= 0.6:
+                        coeff_value = 1
+                    elif 0.6 > slider_value >= -0.6:
+                        coeff_value = 0
+                    elif 0.6 > slider_value >= -1.8:
+                        coeff_value = -1
+                    else:
+                        coeff_value = -2
 
-                if thisComponent.name == "speed":
-                    self.sjData["speed"].append(coeff_value)
-                elif thisComponent.name == "position":
-                    self.sjData["position"].append(coeff_value)
-                elif thisComponent.name == "steering":
-                    self.sjData["steering"].append(coeff_value)
+                    if thisComponent.name == "speed":
+                        self.sjData["speed"].append(coeff_value)
+                    elif thisComponent.name == "position":
+                        self.sjData["position"].append(coeff_value)
+                    elif thisComponent.name == "steering":
+                        self.sjData["steering"].append(coeff_value)
 
         page.end()
 
@@ -253,7 +263,7 @@ class ExperimentRunner(object):
 
         # set up handler to look after randomisation of conditions etc
         self.Trials = data.TrialHandler(
-            nReps=len(self.scenarioList) + 1,
+            nReps=100,
             method="random",
             extraInfo=self.expInfo,
             originPath=-1,
@@ -275,7 +285,15 @@ class ExperimentRunner(object):
         for thisTrial in self.Trials:  # loop trial nReps times
             for page in trialPages:  # loop through each page in each trial
                 self.runRoutine(self.Pages[page])
-        # completed 5.0 repeats of 'Trials'
+                if isinstance(page, SimPage):
+                    self.Trials.addData("colour", self.colourCars[-1])
+                    self.Trials.addData("scenario", self.scenarioList[-1])
+                elif page == "saftey_judgements_page":
+                    self.Trials.addData("speed", self.sjData["speed"][-1])
+                    self.Trials.addData("position", self.sjData["position"][-1])
+                    self.Trials.addData("steering", self.sjData["steering"][-1])
+                elif page == "av_judgements_page":
+                    self.Trials.addData("av_judge", page.slider.markerPos)
 
         self.runRoutine(self.Pages["thanks_page"])
 

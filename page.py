@@ -253,7 +253,7 @@ class SimPage(Page):
             human_controlled_ped=True,
             human_controlled_car=False,
             headless=False,
-            seed=1234,
+            seed=42,
             basic_model=simpleRL_load_path,
             attr_model=shapedRL_load_path,
             log_path=log_path,
@@ -281,8 +281,7 @@ class SimPage(Page):
                 )
                 self.changeModel(model_path)
 
-        self.env.reset(scenario=scenario)
-        obs = self.env.reset()
+        obs = self.env.reset(scenario=scenario)
         done = False
         while not done:
             if self.env.scenarioName in ("H2", "H_l", "H_r"):

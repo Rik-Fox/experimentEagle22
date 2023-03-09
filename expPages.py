@@ -470,7 +470,7 @@ def initPages(win, log_obj):
     )
     slider_4 = visual.Slider(
         win=win,
-        name="slider",
+        name="AV_judge",
         startValue=None,
         size=(1.0, -0.05),
         pos=(0, -0.05),

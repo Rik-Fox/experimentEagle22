@@ -264,7 +264,7 @@ class SimPage(Page):
             human_controlled_ped=True,
             human_controlled_car=False,
             headless=False,
-            seed=42,
+            seed=41522,
             basic_model=simpleRL_load_path,
             attr_model=shapedRL_load_path,
             log_path=log_path,

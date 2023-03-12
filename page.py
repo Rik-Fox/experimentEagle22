@@ -233,6 +233,17 @@ class SimPage(Page):
             3: float(4),
         }
 
+        self.colours = [
+            "blue",
+            "silver",
+            "white",
+            "red",
+            "yellow",
+            "green",
+            "brown",
+            "orange",
+        ]
+
         wkdir = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(
             wkdir,
@@ -264,7 +275,6 @@ class SimPage(Page):
         self.env.modelA = self.env.load_model(model_path)
 
     def runScenario(self, scenario, sjData=None):
-
         if scenario < 2:
             model_path = os.path.join(
                 self.path_to_models,

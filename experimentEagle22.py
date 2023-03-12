@@ -129,6 +129,7 @@ class ExperimentRunner(object):
         self.defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
         self.scenarioList = [0, 1, 8, 9, 16, 17]
+        self.scenarioSeen = []
 
         self.Pages = {page.name: page for page in initPages(self.win, self.thisExp)}
 
@@ -145,7 +146,6 @@ class ExperimentRunner(object):
         x = [0, 1, 2]
 
     def runRoutine(self, page):
-
         page.init()
         # _timeToFirstFrame = self.win.getFutureFlipTime(clock="now")
         continueRoutine = True
@@ -163,11 +163,14 @@ class ExperimentRunner(object):
                     self.sjData["position"].append(0)
 
                 if (self.Trials.thisN + 1) % 7 == 0:
-                    scen = np.random.choice([2, 3, 4, 5])
+                    self.scenarioSeen.append(np.random.choice([2, 3, 4, 5]))
                     storeJudgements = False
                 else:
-                    scen = np.random.choice([0, 1])
-                info = page.runScenario(self.scenarioList[scen], self.sjData)
+                    self.scenarioSeen.append(np.random.choice([0, 1]))
+
+                info = page.runScenario(
+                    self.scenarioList[self.scenarioSeen[-1]], self.sjData
+                )
                 trialDir = os.path.join(
                     os.path.dirname(self.logname), f"Trial_{self.Trials.thisN}"
                 )
@@ -258,12 +261,11 @@ class ExperimentRunner(object):
         self.routineTimer.reset()
 
     def run(self):
-
         self.runRoutine(self.Pages["intro_page"])
 
         # set up handler to look after randomisation of conditions etc
         self.Trials = data.TrialHandler(
-            nReps=100,
+            nReps=50,
             method="random",
             extraInfo=self.expInfo,
             originPath=-1,
@@ -287,7 +289,7 @@ class ExperimentRunner(object):
                 self.runRoutine(self.Pages[page])
                 if isinstance(page, SimPage):
                     self.Trials.addData("colour", self.colourCars[-1])
-                    self.Trials.addData("scenario", self.scenarioList[-1])
+                    self.Trials.addData("scenario", self.scenarioSeen[-1])
                 elif page == "saftey_judgements_page":
                     self.Trials.addData("speed", self.sjData["speed"][-1])
                     self.Trials.addData("position", self.sjData["position"][-1])
